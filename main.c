@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include "simple_shell.h"
 
@@ -11,7 +12,8 @@
  */
 int main(int argc, char **argv, char **env)
 {
-	char buffer[CMD_BUFFER_SIZE];
+	char *buffer = NULL;
+	size_t n = 0;
 	char *cmd_argv[] = {NULL};
 	int cmd_size;
 
@@ -20,14 +22,13 @@ int main(int argc, char **argv, char **env)
 	while (1)
 	{
 		printf("#cisfun$ ");
-		cmd_size = get_cmd(buffer, CMD_BUFFER_SIZE);
+		cmd_size = get_cmd(&buffer, &n);
 		if (cmd_size == 0)
 			continue;
 		if (cmd_size == -1)
 			break;
-
 		execute(buffer, env, cmd_argv);
 	}
-
+	free(buffer);
 	return (0);
 }
