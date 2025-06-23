@@ -3,9 +3,7 @@
 
 #include <stddef.h>
 
-#define CMD_BUFFER_SIZE 2048
-
 int execute(char *cmd, char **env, char **argv);
-int get_cmd(char *buffer, int size);
+int get_cmd(char **buffer, size_t *size);
 
 #endif
