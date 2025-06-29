@@ -49,5 +49,5 @@ else
 wait(&status);
 }
 
-return (0);
+return (status);
 }
