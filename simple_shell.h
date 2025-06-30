@@ -5,5 +5,7 @@
 
 int execute(char *cmd, char **env, char **argv);
 int get_cmd(char **buffer, size_t *size);
+int parse_cmd(char **cmd, char ***args, char *input);
+void free_args(char **args);
 
 #endif
