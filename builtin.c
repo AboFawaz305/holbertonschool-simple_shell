@@ -1,6 +1,7 @@
 #include "simple_shell.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
  * is_builtin - returns with cmd is a builtin command or not
@@ -54,4 +55,22 @@ int exit_shell(char **args, char **env)
 		exit(0);
 	status = _atoi(args[1]);
 	exit(status);
+}
+
+/**
+ * print_env - print the environment variables
+ * @args: the arguments array
+ * @env: the envrironment variables array
+ *
+ * Return: Always 0
+ */
+int print_env(char **args, char **env)
+{
+	(void) args;
+	while (*env != NULL)
+	{
+		printf("%s\n", *env);
+		env++;
+	}
+	return (0);
 }

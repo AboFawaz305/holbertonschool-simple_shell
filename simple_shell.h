@@ -10,5 +10,6 @@ int is_in_path(char *cmd, char **env);
 int parse_cmd(char **cmd, char ***args, char *input);
 void free_args(char **args);
 int exit_shell(char **args, char **env);
+int print_env(char **args, char **env);
 
 #endif
