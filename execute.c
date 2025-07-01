@@ -6,14 +6,14 @@
 #include "simple_shell.h"
 
 /**
-* execute_child - execute command in child process
-* @full_path: full path to executable
-* @argv: command arguments
-* @env: environment variables
-* @cmd: original command name
-*
-* Return: void (function exits)
-*/
+ * execute_child - execute command in child process
+ * @full_path: full path to executable
+ * @argv: command arguments
+ * @env: environment variables
+ * @cmd: original command name
+ *
+ * Return: void (function exits)
+ */
 void execute_child(char *full_path, char **argv, char **env, char *cmd)
 {
 	if (execve(full_path, argv, env) == -1)
@@ -24,12 +24,12 @@ void execute_child(char *full_path, char **argv, char **env, char *cmd)
 }
 
 /**
-* wait_for_child - wait for child process and get exit status
-* @full_path: full path to executable
-* @cmd: original command name
-*
-* Return: exit status of child process
-*/
+ * wait_for_child - wait for child process and get exit status
+ * @full_path: full path to executable
+ * @cmd: original command name
+ *
+ * Return: exit status of child process
+ */
 int wait_for_child(char *full_path, char *cmd)
 {
 	int status;
@@ -45,13 +45,13 @@ int wait_for_child(char *full_path, char *cmd)
 }
 
 /**
-* execute - execute a command
-* @cmd: the command to execute
-* @env: environment variables
-* @argv: command arguments
-*
-* Return: 0 on success, -1 on failure
-*/
+ * execute - execute a command
+ * @cmd: the command to execute
+ * @env: environment variables
+ * @argv: command arguments
+ *
+ * Return: 0 on success, -1 on failure
+ */
 int execute(char *cmd, char **env, char **argv)
 {
 	pid_t pid;
@@ -96,12 +96,12 @@ int execute(char *cmd, char **env, char **argv)
 }
 
 /**
-* is_in_path - checks whether command exists in $PATH or not
-* @cmd: command name
-* @env: environment variables
-*
-* Return: 1 if cmd exists in $PATH or 0 otherwise
-*/
+ * is_in_path - checks whether command exists in $PATH or not
+ * @cmd: command name
+ * @env: environment variables
+ *
+ * Return: 1 if cmd exists in $PATH or 0 otherwise
+ */
 int is_in_path(char *cmd, char **env)
 {
 	char *path, *path_copy;
@@ -141,12 +141,12 @@ int is_in_path(char *cmd, char **env)
 }
 
 /**
-* get_full_path - gets the full path of a command
-* @cmd: command name
-* @env: environment variables
-*
-* Return: full path string or NULL if not found
-*/
+ * get_full_path - gets the full path of a command
+ * @cmd: command name
+ * @env: environment variables
+ *
+ * Return: full path string or NULL if not found
+ */
 char *get_full_path(char *cmd, char **env)
 {
 	char *path, *path_copy, *dir;
