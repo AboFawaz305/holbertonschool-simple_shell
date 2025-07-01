@@ -21,7 +21,8 @@ int main(int argc, char **argv, char **env)
 	(void) argv;
 	while (1)
 	{
-		printf("#cisfun$ ");
+		if (!is_non_interactive_mode())
+			printf("#cisfun$ ");
 		cmd_size = get_cmd(&buffer, &n);
 		if (cmd_size == 0)
 			continue;

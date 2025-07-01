@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <unistd.h>
 
 
 /**
@@ -30,4 +31,14 @@ return (c + 1);
 i++;
 }
 return (NULL);
+}
+
+/**
+ * is_non_interactive_mode - determines if shell is in non-interactive mode
+ *
+ * Return: 1 if non-interactive mode, 0 if interactive mode
+ */
+int is_non_interactive_mode(void)
+{
+	return (!isatty(STDIN_FILENO));
 }
