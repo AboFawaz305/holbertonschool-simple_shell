@@ -15,19 +15,23 @@ int main(int argc, char **argv, char **env)
 	char *buffer = NULL;
 	size_t n = 0;
 	char *cmd_argv[] = {NULL};
-	int cmd_size;
+	int cmd_size, is_nim;
 
 	(void) argc;
 	(void) argv;
+	is_nim = is_non_interactive_mode();
 	while (1)
 	{
-		printf("#cisfun$ ");
+		if (!is_nim)
+			printf("#cisfun$ ");
 		cmd_size = get_cmd(&buffer, &n);
 		if (cmd_size == 0)
 			continue;
 		if (cmd_size == -1)
 			break;
 		execute(buffer, env, cmd_argv);
+		if (is_nim)
+			break;
 	}
 	free(buffer);
 	return (0);
