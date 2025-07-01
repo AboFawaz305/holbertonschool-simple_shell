@@ -27,5 +27,6 @@ int print_env(char **args, char **env);
 int is_builtin(char *cmd);
 int run_builtin(char *cmd, char **args, char **env);
 void interactive_mode(char **env);
+int is_non_interactive_mode(void);
 
 #endif

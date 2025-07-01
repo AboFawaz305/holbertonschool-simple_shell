@@ -14,7 +14,7 @@ int main(int argc, char **argv, char **env)
 {
 	(void) argc;
 	(void) argv;
-	
+	/* TODO: ADD non_interactive mode support(piped input). */
 	interactive_mode(env);
 	return (0);
 }
