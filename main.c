@@ -12,23 +12,9 @@
  */
 int main(int argc, char **argv, char **env)
 {
-	char *buffer = NULL;
-	size_t n = 0;
-	char *cmd_argv[] = {NULL};
-	int cmd_size;
-
 	(void) argc;
 	(void) argv;
-	while (1)
-	{
-		printf("#cisfun$ ");
-		cmd_size = get_cmd(&buffer, &n);
-		if (cmd_size == 0)
-			continue;
-		if (cmd_size == -1)
-			break;
-		execute(buffer, env, cmd_argv);
-	}
-	free(buffer);
+	
+	interactive_mode(env);
 	return (0);
 }
