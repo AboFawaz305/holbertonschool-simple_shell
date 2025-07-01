@@ -57,6 +57,7 @@ int execute(char *cmd, char **env, char **argv)
 	pid_t pid;
 	char *full_path;
 
+
 	if (!cmd || strlen(cmd) == 0)
 		return (0);
 
@@ -70,16 +71,20 @@ int execute(char *cmd, char **env, char **argv)
 	if (!full_path)
 		full_path = cmd;
 
+
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
+
 		if (full_path != cmd)
 			free(full_path);
+
 		return (-1);
 	}
 	else if (pid == 0)
 	{
+
 		execute_child(full_path, argv, env, cmd);
 	}
 	else
@@ -101,6 +106,7 @@ int is_in_path(char *cmd, char **env)
 {
 	char *path, *path_copy;
 	char *dir, *dest;
+
 
 	if (cmd == NULL)
 		return (0);
@@ -183,3 +189,4 @@ char *get_full_path(char *cmd, char **env)
 	free(path_copy);
 	return (NULL);
 }
+

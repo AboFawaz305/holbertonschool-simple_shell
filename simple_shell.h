@@ -8,5 +8,9 @@ int get_cmd(char **buffer, size_t *size);
 char *get_env(char *name, char **env);
 int is_in_path(char *cmd, char **env);
 char *get_full_path(char *cmd, char **env);
+int parse_cmd(char **cmd, char ***args, char *input);
+void free_args(char **args);
+int exit_shell(char **args, char **env);
+int print_env(char **args, char **env);
 
 #endif
