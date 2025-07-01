@@ -15,12 +15,9 @@
  */
 void interactive_mode(char **env)
 {
-	char *buffer = NULL;
+	char *buffer = NULL, *cmd = NULL, **args = NULL;
 	size_t n = 0;
-	int cmd_size;
-	char *cmd = NULL;
-	char **args = NULL;
-	int result;
+	int cmd_size, result;
 
 	while (1)
 	{
@@ -33,7 +30,6 @@ void interactive_mode(char **env)
 		if (cmd_size == -1)
 			break;
 
-		/* Parse the command into name and arguments */
 		result = parse_cmd(&cmd, &args, buffer);
 		if (result == -1)
 		{
@@ -43,18 +39,11 @@ void interactive_mode(char **env)
 		if (result == -2)
 			continue;
 
-		/* Check if it's a builtin command first */
 		if (is_builtin(cmd))
-		{
 			run_builtin(cmd, args, env);
-		}
 		else
-		{
-			/* Execute as external command */
 			execute(cmd, env, args);
-		}
 
-		/* Clean up */
 		free(cmd);
 		free_args(args);
 		cmd = NULL;
