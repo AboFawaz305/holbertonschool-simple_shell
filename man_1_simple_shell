@@ -1,0 +1,188 @@
+.TH HSH 1 "July 2025" "Version 1.0" "Simple Shell Manual"
+.SH NAME
+hsh \- simple UNIX command line interpreter
+.SH SYNOPSIS
+.B hsh
+.br
+.B command | hsh
+.br
+.B hsh < script
+.SH DESCRIPTION
+.B hsh
+is a simple UNIX command line interpreter that replicates basic functionality of the
+.BR sh (1)
+shell. It can execute commands in both interactive and non-interactive modes, supports built-in commands, and can execute external programs found in the PATH environment variable.
+
+When
+.B hsh
+is invoked without any arguments and with standard input connected to a terminal, it operates in interactive mode, displaying the prompt
+.B "#cisfun$ "
+and waiting for user input.
+
+When standard input is not connected to a terminal (such as when using pipes or input redirection),
+.B hsh
+operates in non-interactive mode and processes commands without displaying a prompt.
+
+The shell supports commands with absolute paths, relative paths, and commands found in the PATH environment variable. Lines beginning with '#' are treated as comments and ignored.
+
+.SH BUILT-IN COMMANDS
+The following commands are built into the shell:
+
+.TP
+.B env
+Print the current environment variables to standard output, one per line.
+
+.TP
+.B exit [status]
+Exit the shell with the specified exit status. If no status is provided, exits with status 0. The status must be a non-negative integer.
+
+.SH COMMAND EXECUTION
+Commands are executed by searching for the command name in the directories listed in the PATH environment variable, in order. If the command contains a slash (/), it is executed directly without PATH searching.
+
+The shell creates a child process using
+.BR fork (2)
+and executes the command using
+.BR execve (2).
+The parent process waits for the child to complete before continuing.
+
+All environment variables are inherited by executed commands.
+
+.SH EXAMPLES
+.SS Interactive Mode
+.nf
+$ ./hsh
+#cisfun$ ls -la
+total 24
+drwxrwxr-x 2 user user 4096 Dec  7 10:30 .
+drwxrwxr-x 3 user user 4096 Dec  7 10:29 ..
+-rwxrwxr-x 1 user user 8760 Dec  7 10:30 hsh
+#cisfun$ pwd
+/home/user/simple_shell
+#cisfun$ /bin/echo "Absolute path command"
+Absolute path command
+#cisfun$ env
+PATH=/usr/local/bin:/usr/bin:/bin
+HOME=/home/user
+USER=user
+#cisfun$ exit 0
+$
+.fi
+
+.SS Non-Interactive Mode
+.nf
+$ echo "ls -la" | ./hsh
+total 24
+drwxrwxr-x 2 user user 4096 Dec  7 10:30 .
+drwxrwxr-x 3 user user 4096 Dec  7 10:29 ..
+-rwxrwxr-x 1 user user 8760 Dec  7 10:30 hsh
+
+$ echo "exit 42" | ./hsh ; echo $?
+42
+
+$ cat commands.txt | ./hsh
+[output of commands in file]
+.fi
+
+.SS Comment Handling
+.nf
+#cisfun$ # This is a comment
+#cisfun$ echo "Hello" # This line is executed
+Hello
+.fi
+
+.SH EXIT STATUS
+.B hsh
+exits with the following status values:
+
+.TP
+.B 0
+Successful completion or explicit exit with status 0.
+
+.TP
+.B 127
+Command not found.
+
+.TP
+.B Other
+The exit status of the last command executed, or the status specified with the
+.B exit
+built-in command.
+
+.SH ENVIRONMENT
+.TP
+.B PATH
+A colon-separated list of directories in which to search for executable commands. If PATH is not set or empty, commands must be specified with their full pathname.
+
+.TP
+.B Other Variables
+All environment variables are inherited by executed commands and can be displayed using the
+.B env
+built-in command.
+
+.SH FILES
+.TP
+.B /bin/sh
+The standard shell, which this program attempts to emulate in basic functionality.
+
+.SH LIMITATIONS
+This simple shell implementation does not support:
+.IP \(bu 2
+Command line editing or history
+.IP \(bu 2
+Job control and background processes
+.IP \(bu 2
+Input/output redirection (>, <, >>)
+.IP \(bu 2
+Pipes (|) between commands
+.IP \(bu 2
+Command substitution ($() or ``)
+.IP \(bu 2
+Variable expansion ($VAR)
+.IP \(bu 2
+Wildcard expansion (globbing)
+.IP \(bu 2
+Command chaining (;, &&, ||)
+.IP \(bu 2
+Quoting and escape sequences
+.IP \(bu 2
+Aliases or functions
+.IP \(bu 2
+Signal handling beyond default behavior
+
+.B Technical Limitations:
+.IP \(bu 2
+Maximum command line length is system-dependent (typically limited by available memory)
+.IP \(bu 2
+Number of arguments is limited by available memory
+.IP \(bu 2
+Exit status values must be non-negative integers
+
+.SH SIGNALS
+The shell does not implement custom signal handling. All signals follow default system behavior.
+
+.TP
+.B EOF (Ctrl+D)
+Causes the shell to exit gracefully in interactive mode.
+
+
+.SH AUTHORS
+.B AboFawaz305
+<84806203+AboFawaz305@users.noreply.github.com>
+.br
+.B Abdulrahman9907
+<10939@holbertonstudents.com>
+
+.SH SEE ALSO
+.BR sh (1),
+.BR bash (1),
+.BR execve (2),
+.BR fork (2),
+.BR wait (2),
+.BR environ (7),
+.BR isatty (3)
+
+.SH STANDARDS
+This implementation follows basic POSIX shell conventions for command execution and environment variable handling. It implements a minimal subset of POSIX.1-2008 shell functionality, focusing on simple command execution without advanced shell features.
+
+.SH HISTORY
+This simple shell was created as an educational project to understand the fundamentals of shell implementation and system programming in C. It demonstrates core concepts including process creation, program execution, and environment variable management.
