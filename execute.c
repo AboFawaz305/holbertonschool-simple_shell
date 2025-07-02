@@ -49,21 +49,25 @@ int wait_for_child(char *full_path, char *cmd)
  * @cmd: the command to execute
  * @env: environment variables
  * @argv: command arguments
+ * @line_num: line number for error reporting
+ * @prog_name: program name for error reporting
  *
- * Return: 0 on success, -1 on failure
+ * Return: 0 on success, 127 on command not found, other exit codes on failure
  */
-int execute(char *cmd, char **env, char **argv)
+int execute(char *cmd, char **env, char **argv, int line_num, char *prog_name)
 {
 	pid_t pid;
 	char *full_path;
-
 
 	if (!cmd || strlen(cmd) == 0)
 		return (0);
 
 	if (!is_in_path(cmd, env))
 	{
-		fprintf(stderr, "%s: command not found\n", cmd);
+		if (prog_name && line_num > 0)
+			fprintf(stderr, "%s: %d: %s: not found\n", prog_name, line_num, cmd);
+		else
+			fprintf(stderr, "%s: command not found\n", cmd);
 		return (127);
 	}
 
@@ -71,20 +75,16 @@ int execute(char *cmd, char **env, char **argv)
 	if (!full_path)
 		full_path = cmd;
 
-
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
-
 		if (full_path != cmd)
 			free(full_path);
-
 		return (-1);
 	}
 	else if (pid == 0)
 	{
-
 		execute_child(full_path, argv, env, cmd);
 	}
 	else
@@ -106,7 +106,6 @@ int is_in_path(char *cmd, char **env)
 {
 	char *path, *path_copy;
 	char *dir, *dest;
-
 
 	if (cmd == NULL)
 		return (0);
@@ -189,4 +188,3 @@ char *get_full_path(char *cmd, char **env)
 	free(path_copy);
 	return (NULL);
 }
-
