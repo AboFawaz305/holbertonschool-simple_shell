@@ -99,11 +99,8 @@ int get_cmd(char **buffer, size_t *size)
 	if (cmd == NULL)
 		return (0);
 	if (cmd[0] == 4 || bytes == -1)
-	{
 		/* We catched a C-d */
-		clearerr(stdin); /* clear stdin so we can use getline again */
 		return (-1);
-	}
 	if (cmd[0] == 10)
 		/* We catched an empty command */
 		return (0);
