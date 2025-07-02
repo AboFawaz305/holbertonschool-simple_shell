@@ -14,8 +14,7 @@ struct builtin_cmd
 	int (*func)(char **args, char **env);
 };
 
-
-int execute(char *cmd, char **env, char **argv);
+int execute(char *cmd, char **env, char **argv, int line_num, char *prog_name);
 int get_cmd(char **buffer, size_t *size);
 char *get_env(char *name, char **env);
 int is_in_path(char *cmd, char **env);
