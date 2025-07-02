@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "simple_shell.h"
-#include <string.h>
 
 /**
  * main - a simple shell program
@@ -19,16 +18,17 @@ int main(int argc, char **argv, char **env)
 	{
 		char *buffer = NULL;
 		size_t n = 0;
-		int cmd_size, status = 0;
+		int cmd_size, status = 0, line_num = 0;
 
 		while ((cmd_size = get_cmd(&buffer, &n)) != -1)
 		{
+			line_num++;
 			if (cmd_size == 0)
 				continue;
-			status = run_command(buffer, env, status);
+			status = run_command(buffer, env, status, line_num, argv[0]);
 		}
 		free(buffer);
-		return (0);
+		return (status);
 	}
 	interactive_mode(env);
 	return (0);
