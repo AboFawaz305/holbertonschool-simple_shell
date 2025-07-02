@@ -7,7 +7,6 @@
  * builtin_commands - array of builtin commands
  */
 static struct builtin_cmd builtin_commands[] = {
-	/* {"exit", exit_shell}, */
 	{"env", print_env},
 	{NULL, NULL}
 };
@@ -55,6 +54,7 @@ int _atoi(char *s)
 
 	return (r);
 }
+
 
 /**
  * print_env - print the environment variables

@@ -58,6 +58,7 @@ void interactive_mode(char **env)
 	size_t n = 0;
 	int cmd_size, exit_status = 0;
 
+
 	while (1)
 	{
 		printf("#cisfun$ ");
