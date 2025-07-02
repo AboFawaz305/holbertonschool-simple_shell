@@ -37,13 +37,9 @@ void interactive_mode(char **env)
 		if (result == -2 || result == -3)
 			continue;
 		if (is_builtin(cmd))
-		{
-			if (strcmp(cmd, "exit") == 0)
-				free(buffer);
 			run_builtin(cmd, args, env);
-		}
 		else
-			execute(cmd, env, args);
+			execute(cmd, env, args, 0, NULL);
 		free(cmd);
 		free_args(args);
 		cmd = NULL;
@@ -51,4 +47,3 @@ void interactive_mode(char **env)
 	}
 	free(buffer);
 }
-
