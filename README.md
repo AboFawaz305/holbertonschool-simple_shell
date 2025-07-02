@@ -1,76 +1,42 @@
 # Simple Shell
 
-A simple implementation of a shell for Linux systems.
+This project is a simple UNIX command-line shell implemented in C. It provides basic functionalities for interpreting and executing user commands, similar to standard shells like `sh` or `bash`.
 
 ## Description
 
-This project is a simple UNIX command line interpreter that replicates functionalities of the simple shell (sh). The shell can run in both interactive and non-interactive mode.
-
-## Features
-
-- Display a prompt and wait for the user to type a command
-- Execute simple commands with arguments
-- Handle the PATH environment variable
-- Implement built-in commands:
-  - `exit` - exit the shell
-  - `env` - print environment variables
-- Handle command not found errors
-- Support for executable files in PATH
+The simple shell reads user input from standard input in interactive mode, parses commands, and executes them in a loop until the user exits. It supports executing system programs and handling arguments. The shell is designed for educational purposes and demonstrates fundamental concepts of process management and command execution in UNIX systems.
 
 ## Compilation
 
-To compile the shell, use:
+To compile the shell, use the following command:
 
-```bash
-gcc -Wall -Wextra -Werror -pedantic -std=gnu89 *.c -o hsh
+```sh
+gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 ```
 
-## Usage
+This will create an executable named `hsh`.
 
-### Interactive Mode
+## Usage Examples
 
-Run the shell in interactive mode:
+After compiling, you can run the shell interactively:
 
-```bash
+```sh
 ./hsh
 ```
 
-Example:
-```bash
-$ ./hsh
-#cisfun$ ls
-builtin.c  execute.c  get_cmd.c  hsh  interactive.c  main.c  README.md  simple_shell.h  utilities.c
-#cisfun$ pwd
-/home/user/simple_shell
-#cisfun$ exit
-$
+You can then enter commands like:
+
+```sh
+$ ls -l
+$ /bin/echo Hello, World!
+$ pwd
+$ exit
 ```
 
-### Non-Interactive Mode
+## Testing
 
-The shell can also handle commands passed through pipes:
-
-```bash
-$ echo "ls" | ./hsh
-builtin.c  execute.c  get_cmd.c  hsh  interactive.c  main.c  README.md  simple_shell.h  utilities.c
-$
-```
-
-## Built-in Commands
-
-- `exit [status]` - Exit the shell with optional exit status
-- `env` - Print the current environment variables
-
-## Files
-
-- `main.c` - Entry point of the program
-- `interactive.c` - Handles interactive mode
-- `execute.c` - Command execution and PATH handling
-- `builtin.c` - Built-in command implementations
-- `get_cmd.c` - Command parsing and input handling
-- `utilities.c` - Utility functions
-- `simple_shell.h` - Header file with function prototypes and structures
+You can test the shell by running it and entering various UNIX commands in interactive mode. Try commands such as `ls`, `pwd`, `echo`, or any executable available on your system.
 
 ## Authors
 
-See the AUTHORS file for a list of contributors to this project.
+See the [AUTHORS](AUTHORS) file for a list of contributors to this project.
