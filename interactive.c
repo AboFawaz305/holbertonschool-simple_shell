@@ -71,4 +71,3 @@ void interactive_mode(char **env)
 	}
 	free(buffer);
 }
-
