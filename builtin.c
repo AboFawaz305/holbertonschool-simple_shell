@@ -67,12 +67,12 @@ int _atoi(char *s)
  */
 int exit_shell(char **args, char **env)
 {
-	int status;
+	int status = 0;
 
 	(void) env;
-	if (args[1] == NULL)
-		exit(0);
-	status = _atoi(args[1]);
+	if (args[1] != NULL)
+		status = _atoi(args[1]);
+	free_args(args);
 	exit(status);
 }
 
@@ -113,6 +113,8 @@ int run_builtin(char *cmd, char **args, char **env)
 	{
 		if (strcmp(cmd, builtin_commands[i].name) == 0)
 		{
+			if (strcmp(cmd, "exit") == 0)
+				free(cmd);
 			return (builtin_commands[i].func(args, env));
 		}
 	}
