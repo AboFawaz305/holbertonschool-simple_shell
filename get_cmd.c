@@ -62,6 +62,12 @@ int parse_cmd(char **cmd, char ***args, char *input)
 		free(input_copy);
 		return (-2);
 	}
+	if (word[0] == '#')
+	{
+		free(*args);
+		free(input_copy);
+		return (-3);
+	}
 	*cmd = strdup(word);
 	i = 0;
 	while (word != NULL)

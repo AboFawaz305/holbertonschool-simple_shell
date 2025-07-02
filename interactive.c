@@ -34,7 +34,7 @@ void interactive_mode(char **env)
 			fprintf(stderr, "Memory allocation error\n");
 			continue;
 		}
-		if (result == -2)
+		if (result == -2 || result == -3)
 			continue;
 		if (is_builtin(cmd))
 			run_builtin(cmd, args, env);
