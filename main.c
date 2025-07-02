@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "simple_shell.h"
+#include <string.h>
 
 /**
  * main - a simple shell program
@@ -33,7 +34,11 @@ int main(int argc, char **argv, char **env)
 			if (result == -2 || result == -3)
 				continue;
 			if (is_builtin(cmd))
+			{
+				if (strcmp(cmd, "exit") == 0)
+					free(buffer);
 				run_builtin(cmd, args, env);
+			}
 			else
 				execute(cmd, env, args);
 			free(cmd);
