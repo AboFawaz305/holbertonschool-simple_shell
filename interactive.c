@@ -8,10 +8,13 @@
  * @line: a null terminated string
  * @exit_status: last command exit status
  * @env: the environment variables array
+ * @line_num: the current line number
+ * @prog_name: the program name
  *
  * Return: the command exit status
  */
-int run_command(char *line, char **env, int exit_status)
+int run_command(char *line, char **env, int exit_status,
+		int line_num, char *prog_name)
 {
 	char *cmd = NULL, **args = NULL;
 	int status = 0, result;
@@ -36,7 +39,7 @@ int run_command(char *line, char **env, int exit_status)
 		exit(exit_status);
 	}
 	else
-		status = execute(cmd, env, args);
+		status = execute(cmd, env, args, line_num, prog_name);
 	free(cmd);
 	free_args(args);
 	return (status);
@@ -67,7 +70,7 @@ void interactive_mode(char **env)
 			continue;
 		if (cmd_size == -1)
 			break;
-		exit_status = run_command(buffer, env, exit_status);
+		exit_status = run_command(buffer, env, exit_status, 0, NULL);
 	}
 	free(buffer);
 }
