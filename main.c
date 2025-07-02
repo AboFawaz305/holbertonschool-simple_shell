@@ -17,34 +17,15 @@ int main(int argc, char **argv, char **env)
 	(void) argv;
 	if (is_non_interactive_mode())
 	{
-		char *buffer = NULL, *cmd = NULL, **args = NULL;
+		char *buffer = NULL;
 		size_t n = 0;
-		int cmd_size, result;
+		int cmd_size, status = 0;
 
 		while ((cmd_size = get_cmd(&buffer, &n)) != -1)
 		{
 			if (cmd_size == 0)
 				continue;
-			result = parse_cmd(&cmd, &args, buffer);
-			if (result == -1)
-			{
-				fprintf(stderr, "Memory allocation error\n");
-				continue;
-			}
-			if (result == -2 || result == -3)
-				continue;
-			if (is_builtin(cmd))
-			{
-				if (strcmp(cmd, "exit") == 0)
-					free(buffer);
-				run_builtin(cmd, args, env);
-			}
-			else
-				execute(cmd, env, args);
-			free(cmd);
-			free_args(args);
-			cmd = NULL;
-			args = NULL;
+			status = run_command(buffer, env, status);
 		}
 		free(buffer);
 		return (0);

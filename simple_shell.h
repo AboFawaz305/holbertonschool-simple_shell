@@ -15,6 +15,8 @@ struct builtin_cmd
 };
 
 
+int _atoi(char *s);
+int run_command(char *line, char **env, int exit_status);
 int execute(char *cmd, char **env, char **argv);
 int get_cmd(char **buffer, size_t *size);
 char *get_env(char *name, char **env);

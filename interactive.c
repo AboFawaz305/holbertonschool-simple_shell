@@ -4,6 +4,45 @@
 #include "simple_shell.h"
 
 /**
+ * run_command - run a command line
+ * @line: a null terminated string
+ * @exit_status: last command exit status
+ * @env: the environment variables array
+ *
+ * Return: the command exit status
+ */
+int run_command(char *line, char **env, int exit_status)
+{
+	char *cmd = NULL, **args = NULL;
+	int status = 0, result;
+
+	result = parse_cmd(&cmd, &args, line);
+	if (result == -1)
+	{
+		fprintf(stderr, "Memory allocation error\n");
+		return (0);
+	}
+	if (result == -2 || result == -3)
+		return (0);
+	if (is_builtin(cmd))
+		status = run_builtin(cmd, args, env);
+	else if (strcmp(cmd, "exit") == 0)
+	{
+		free(line);
+		free(cmd);
+		if (args[1] != NULL)
+			exit_status = _atoi(args[1]);
+		free_args(args);
+		exit(exit_status);
+	}
+	else
+		status = execute(cmd, env, args);
+	free(cmd);
+	free_args(args);
+	return (status);
+}
+
+/**
  * interactive_mode - start the program in interactive mode
  * @env: environment variables
  *
@@ -15,9 +54,9 @@
  */
 void interactive_mode(char **env)
 {
-	char *buffer = NULL, *cmd = NULL, **args = NULL;
+	char *buffer = NULL;
 	size_t n = 0;
-	int cmd_size, result;
+	int cmd_size, exit_status = 0;
 
 	while (1)
 	{
@@ -28,26 +67,7 @@ void interactive_mode(char **env)
 			continue;
 		if (cmd_size == -1)
 			break;
-		result = parse_cmd(&cmd, &args, buffer);
-		if (result == -1)
-		{
-			fprintf(stderr, "Memory allocation error\n");
-			continue;
-		}
-		if (result == -2 || result == -3)
-			continue;
-		if (is_builtin(cmd))
-		{
-			if (strcmp(cmd, "exit") == 0)
-				free(buffer);
-			run_builtin(cmd, args, env);
-		}
-		else
-			execute(cmd, env, args);
-		free(cmd);
-		free_args(args);
-		cmd = NULL;
-		args = NULL;
+		exit_status = run_command(buffer, env, exit_status);
 	}
 	free(buffer);
 }
