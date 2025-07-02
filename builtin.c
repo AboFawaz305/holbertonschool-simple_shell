@@ -7,7 +7,7 @@
  * builtin_commands - array of builtin commands
  */
 static struct builtin_cmd builtin_commands[] = {
-	{"exit", exit_shell},
+	/* {"exit", exit_shell}, */
 	{"env", print_env},
 	{NULL, NULL}
 };
@@ -57,26 +57,6 @@ int _atoi(char *s)
 }
 
 /**
- * exit_shell - exit from the shell
- * @args: exit arguments
- * @env: environment variables
- *
- * Description: by default the program will exit with status 0. If there is an
- * argument the program will exit with a status equal to the first argument.
- * Return: Always 0;
- */
-int exit_shell(char **args, char **env)
-{
-	int status = 0;
-
-	(void) env;
-	if (args[1] != NULL)
-		status = _atoi(args[1]);
-	free_args(args);
-	exit(status);
-}
-
-/**
  * print_env - print the environment variables
  * @args: the arguments array
  * @env: the envrironment variables array
@@ -113,8 +93,6 @@ int run_builtin(char *cmd, char **args, char **env)
 	{
 		if (strcmp(cmd, builtin_commands[i].name) == 0)
 		{
-			if (strcmp(cmd, "exit") == 0)
-				free(cmd);
 			return (builtin_commands[i].func(args, env));
 		}
 	}
