@@ -1,13 +1,17 @@
-.TH HSH 1 "December 2024" "Version 1.0" "Simple Shell Manual"
+.TH HSH 1 "July 2025" "Version 1.0" "Simple Shell Manual"
 .SH NAME
 hsh \- simple UNIX command line interpreter
 .SH SYNOPSIS
 .B hsh
+.br
+.B command | hsh
+.br
+.B hsh < script
 .SH DESCRIPTION
 .B hsh
 is a simple UNIX command line interpreter that replicates basic functionality of the
 .BR sh (1)
-shell. It can execute commands in both interactive and non-interactive modes, supports built-in commands, and can execute external programs found in the PATH.
+shell. It can execute commands in both interactive and non-interactive modes, supports built-in commands, and can execute external programs found in the PATH environment variable.
 
 When
 .B hsh
@@ -19,25 +23,29 @@ When standard input is not connected to a terminal (such as when using pipes or 
 .B hsh
 operates in non-interactive mode and processes commands without displaying a prompt.
 
+The shell supports commands with absolute paths, relative paths, and commands found in the PATH environment variable. Lines beginning with '#' are treated as comments and ignored.
+
 .SH BUILT-IN COMMANDS
 The following commands are built into the shell:
-
-.TP
-.B exit [status]
-Exit the shell with the specified exit status. If no status is provided, the shell exits with status 0. The status must be a non-negative integer.
 
 .TP
 .B env
 Print the current environment variables to standard output, one per line.
 
+.TP
+.B exit [status]
+Exit the shell with the specified exit status. If no status is provided, exits with status 0. The status must be a non-negative integer.
+
 .SH COMMAND EXECUTION
-Commands are executed by searching for the command name in the directories listed in the PATH environment variable. If the command contains a slash (/), it is executed directly without PATH searching.
+Commands are executed by searching for the command name in the directories listed in the PATH environment variable, in order. If the command contains a slash (/), it is executed directly without PATH searching.
 
 The shell creates a child process using
 .BR fork (2)
 and executes the command using
 .BR execve (2).
 The parent process waits for the child to complete before continuing.
+
+All environment variables are inherited by executed commands.
 
 .SH EXAMPLES
 .SS Interactive Mode
@@ -50,6 +58,8 @@ drwxrwxr-x 3 user user 4096 Dec  7 10:29 ..
 -rwxrwxr-x 1 user user 8760 Dec  7 10:30 hsh
 #cisfun$ pwd
 /home/user/simple_shell
+#cisfun$ /bin/echo "Absolute path command"
+Absolute path command
 #cisfun$ env
 PATH=/usr/local/bin:/usr/bin:/bin
 HOME=/home/user
@@ -68,6 +78,16 @@ drwxrwxr-x 3 user user 4096 Dec  7 10:29 ..
 
 $ echo "exit 42" | ./hsh ; echo $?
 42
+
+$ cat commands.txt | ./hsh
+[output of commands in file]
+.fi
+
+.SS Comment Handling
+.nf
+#cisfun$ # This is a comment
+#cisfun$ echo "Hello" # This line is executed
+Hello
 .fi
 
 .SH EXIT STATUS
@@ -91,7 +111,7 @@ built-in command.
 .SH ENVIRONMENT
 .TP
 .B PATH
-A colon-separated list of directories in which to search for executable commands. If PATH is not set, commands must be specified with their full pathname.
+A colon-separated list of directories in which to search for executable commands. If PATH is not set or empty, commands must be specified with their full pathname.
 
 .TP
 .B Other Variables
@@ -113,11 +133,11 @@ Job control and background processes
 .IP \(bu 2
 Input/output redirection (>, <, >>)
 .IP \(bu 2
-Pipes (|)
+Pipes (|) between commands
 .IP \(bu 2
-Command substitution
+Command substitution ($() or ``)
 .IP \(bu 2
-Variable expansion
+Variable expansion ($VAR)
 .IP \(bu 2
 Wildcard expansion (globbing)
 .IP \(bu 2
@@ -126,34 +146,31 @@ Command chaining (;, &&, ||)
 Quoting and escape sequences
 .IP \(bu 2
 Aliases or functions
+.IP \(bu 2
+Signal handling beyond default behavior
+
+.B Technical Limitations:
+.IP \(bu 2
+Maximum command line length is system-dependent (typically limited by available memory)
+.IP \(bu 2
+Number of arguments is limited by available memory
+.IP \(bu 2
+Exit status values must be non-negative integers
 
 .SH SIGNALS
-.TP
-.B SIGINT
-Ignored in interactive mode to prevent accidental termination.
+The shell does not implement custom signal handling. All signals follow default system behavior.
 
 .TP
 .B EOF (Ctrl+D)
 Causes the shell to exit gracefully in interactive mode.
 
-.SH DIAGNOSTICS
-Error messages are written to standard error and follow this format:
-
-.TP
-.B command: not found
-The specified command could not be found in any directory listed in PATH.
-
-.TP
-.B Memory allocation error
-Insufficient memory to allocate required data structures.
-
-.SH BUGS
-Report bugs to the project maintainers. See the AUTHORS file for contact information.
-
-Known limitations are listed in the LIMITATIONS section above.
 
 .SH AUTHORS
-See the AUTHORS file in the project repository for a complete list of contributors.
+.B AboFawaz305
+<84806203+AboFawaz305@users.noreply.github.com>
+.br
+.B Abdulrahman9907
+<10939@holbertonstudents.com>
 
 .SH SEE ALSO
 .BR sh (1),
@@ -161,10 +178,11 @@ See the AUTHORS file in the project repository for a complete list of contributo
 .BR execve (2),
 .BR fork (2),
 .BR wait (2),
-.BR environ (7)
+.BR environ (7),
+.BR isatty (3)
 
 .SH STANDARDS
-This implementation follows POSIX.1-2008 standards where applicable, though it implements only a subset of the full shell specification.
+This implementation follows basic POSIX shell conventions for command execution and environment variable handling. It implements a minimal subset of POSIX.1-2008 shell functionality, focusing on simple command execution without advanced shell features.
 
 .SH HISTORY
-This simple shell was created as an educational project to understand the fundamentals of shell implementation and system programming in C.
+This simple shell was created as an educational project to understand the fundamentals of shell implementation and system programming in C. It demonstrates core concepts including process creation, program execution, and environment variable management.
