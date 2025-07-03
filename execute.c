@@ -109,7 +109,7 @@ int is_in_path(char *cmd, char **env)
 
 	if (cmd == NULL)
 		return (0);
-	if (access(cmd, X_OK) == 0)
+	if (strchr(cmd, '/') && access(cmd, X_OK) == 0)
 		return (1);
 
 	path = get_env("PATH", env);
