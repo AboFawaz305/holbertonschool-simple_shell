@@ -4,9 +4,6 @@
 #include <signal.h>
 #include <unistd.h>
 
-int status = 0;
-char *prompt = "#cisfun$ ";
-
 /**
  * ctrl_c_handler - a handler for control C events
  * @sig: the received signal number
@@ -15,9 +12,8 @@ void ctrl_c_handler(int sig)
 {
 	(void) sig;
 	write(STDIN_FILENO, "\n", 1);
-	printf("%s", prompt);
+	printf("#cisfun$ ");
 	fflush(stdout);
-	status = 130;
 }
 
 /**
@@ -30,6 +26,8 @@ void ctrl_c_handler(int sig)
  */
 int main(int argc, char **argv, char **env)
 {
+	int status = 0;
+	char *prompt = "#cisfun$ ";
 	(void) argc;
 	(void) argv;
 	signal(SIGINT, ctrl_c_handler);
