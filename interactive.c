@@ -48,6 +48,8 @@ int run_command(char *line, char **env, int exit_status,
 /**
  * interactive_mode - start the program in interactive mode
  * @env: environment variables
+ * @status: a pointer to the palce to store the status
+ * @prompt: the prompt text
  *
  * Description: This function starts the program in interactive mode.
  * It prints a prompt to the user and waits until they write a command.
@@ -55,22 +57,22 @@ int run_command(char *line, char **env, int exit_status,
  * After command execution, it prints the prompt again and waits for
  * another command. When the user hits Ctrl-D, the program stops.
  */
-void interactive_mode(char **env)
+void interactive_mode(char **env, int *status, char *prompt)
 {
 	char *buffer = NULL;
 	size_t n = 0;
-	int cmd_size, exit_status = 0;
+	int cmd_size;
 
 	while (1)
 	{
-		printf("#cisfun$ ");
+		printf("%s", prompt);
 		fflush(stdout);
 		cmd_size = get_cmd(&buffer, &n);
 		if (cmd_size == 0)
 			continue;
 		if (cmd_size == -1)
 			break;
-		exit_status = run_command(buffer, env, exit_status, 0, NULL);
+		*status = run_command(buffer, env, *status, 0, NULL);
 	}
 	free(buffer);
 }
