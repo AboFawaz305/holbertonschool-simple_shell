@@ -37,17 +37,28 @@ int is_builtin(char *cmd)
 /**
  * _atoi - convert s to an integer
  * @s: a null terminated string.
+ * @prog_name: the program_name
  *
  * Return: s converted to an int.
  */
-int _atoi(char *s)
+int _atoi(char *s, char *prog_name)
 {
 	int r = 0;
 	int size = strlen(s) - 1;
-	int b = 1;
+	int b = 1, x = 0;
 
-	while (size >= 0)
+	if (s[0] == '-')
 	{
+		b *= -1;
+		x += 1;
+	}
+	while (size >= x)
+	{
+		if (s[size] < '0' || s[size] > '9')
+		{
+			fprintf(stderr, "%s: exit: numeric argument required\n", prog_name);
+			return (2);
+		}
 		r += (s[size] - '0') * b;
 		b *= 10;
 		size--;
