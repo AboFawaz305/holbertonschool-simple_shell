@@ -34,7 +34,7 @@ int run_command(char *line, char **env, int exit_status,
 		free(line);
 		free(cmd);
 		if (args[1] != NULL)
-			exit_status = _atoi(args[1]);
+			exit_status = _atoi(args[1], prog_name);
 		free_args(args);
 		exit(exit_status);
 	}

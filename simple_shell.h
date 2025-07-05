@@ -14,7 +14,7 @@ struct builtin_cmd
 	int (*func)(char **args, char **env);
 };
 
-int _atoi(char *s);
+int _atoi(char *s, char *prog_name);
 int run_command(char *line, char **env, int exit_status,
 		int line_num, char *prog_name);
 int execute(char *cmd, char **env, char **argv, int line_num, char *prog_name);
